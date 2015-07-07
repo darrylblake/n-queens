@@ -138,27 +138,18 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      //console.log(this.rows());
       var numRows = this.get(0);
-      //console.log(majorDiagonalColumnIndexAtFirstRow, numRows.length);
       var count = 0;
       for (var i = 0; i < numRows.length; i++) {
-        // X, Y must not go out of board boundaries
         var row = this.get(i);
         var diagIndex = majorDiagonalColumnIndexAtFirstRow + i;
-        // Constrains.. these don't exactly work.
-        //if (diagIndex >= 0 && diagIndex < numRows) {
-          //console.log('row:', i, ' col:', diagIndex, ' square:', row[diagIndex]);
+        //console.log('row:', i, ' col:', diagIndex, ' square:', row[diagIndex]);
 
-          // ***ERIC, I changed this from zero.. as !== 0 was triggering 'undefined' too..
-          if (row[diagIndex] === 1) { 
-            count++;
-          }  
-        //}
+        // ***ERIC, I changed this from zero.. as !== 0 was triggering 'undefined' too..
+        if (row[diagIndex] === 1) { 
+          count++;
+        }  
       }
-
-      console.log('COUNT:', count);
-
       return count > 1;
     },
 
@@ -183,33 +174,32 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      console.log(this.rows());
       var numRows = this.get(0);
-      //console.log(majorDiagonalColumnIndexAtFirstRow, numRows.length);
+      
       var count = 0;
-      for (var i = numRows.length; i > 0; i--) {
-        // X, Y must not go out of board boundaries
-        console.log('row:', i, ' col:', diagIndex, ' square:', row[diagIndex]);
+
+      for (var i = 0; i < numRows.length; i++) {
         var row = this.get(i);
-        var diagIndex = minorDiagonalColumnIndexAtFirstRow + i;
-        // Constrains.. these don't exactly work.
-        //if (diagIndex >= 0 && diagIndex < numRows) {
-          
-          if (row[diagIndex] === 1) { 
-            count++;
-          }  
-        //}
+        var diagIndex = minorDiagonalColumnIndexAtFirstRow - i;
+        console.log('row:', i, ' col:', diagIndex, ' square:', row[diagIndex]);
+        if (row[diagIndex] === 1) { 
+          count++;
+        }  
       }
+
+      console.log('COUNT:', count);
+
       return count > 1;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-
       var length = this.get(0).length;
       var conflict = false;
       var offset = length + 2; // ERIC, changes to + intead.. to extend past right of board
-      for (var i=offset; i>0; i--) {
-        console.log('this ran');
+
+      for (var i=offset; i>=0; i--) {
         if (this.hasMinorDiagonalConflictAt(i)) {
           conflict = true;
         }
