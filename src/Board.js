@@ -138,7 +138,7 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      console.log(this.rows());
+      //console.log(this.rows());
       var numRows = this.get(0);
       //console.log(majorDiagonalColumnIndexAtFirstRow, numRows.length);
       var count = 0;
@@ -146,24 +146,29 @@
         // X, Y must not go out of board boundaries
         var row = this.get(i);
         var diagIndex = majorDiagonalColumnIndexAtFirstRow + i;
-        // Constrains, checking 
+        // Constrains.. these don't exactly work.
         //if (diagIndex >= 0 && diagIndex < numRows) {
-          console.log('row:', i, ' col:', diagIndex, ' square:', row[diagIndex]);
-          if (row[diagIndex] !== 0) {
+          //console.log('row:', i, ' col:', diagIndex, ' square:', row[diagIndex]);
+
+          // ***ERIC, I changed this from zero.. as !== 0 was triggering 'undefined' too..
+          if (row[diagIndex] === 1) { 
             count++;
           }  
         //}
       }
+
+      console.log('COUNT:', count);
 
       return count > 1;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      console.log('---------------start---------------');
       var length = this.get(0).length;
       var conflict = false;
       var offset = length - 2;
-      for (var i=-offset; i<length; i++) {
+      for (var i=0-offset; i<length; i++) {
         if (this.hasMajorDiagonalConflictAt(i)) {
           conflict = true;
         }
@@ -178,12 +183,38 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var numRows = this.get(0);
+      //console.log(majorDiagonalColumnIndexAtFirstRow, numRows.length);
+      var count = 0;
+      for (var i = numRows.length; i > 0; i--) {
+        // X, Y must not go out of board boundaries
+        console.log('row:', i, ' col:', diagIndex, ' square:', row[diagIndex]);
+        var row = this.get(i);
+        var diagIndex = minorDiagonalColumnIndexAtFirstRow + i;
+        // Constrains.. these don't exactly work.
+        //if (diagIndex >= 0 && diagIndex < numRows) {
+          
+          if (row[diagIndex] === 1) { 
+            count++;
+          }  
+        //}
+      }
+      return count > 1;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+
+      var length = this.get(0).length;
+      var conflict = false;
+      var offset = length + 2; // ERIC, changes to + intead.. to extend past right of board
+      for (var i=offset; i>0; i--) {
+        console.log('this ran');
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          conflict = true;
+        }
+      }
+      return conflict;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
