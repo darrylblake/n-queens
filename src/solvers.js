@@ -68,35 +68,36 @@ window.findNRooksSolution = function(n) {
 window.countNRooksSolutions = function(n) {
   var results = [];
 
-  var recurse = function(board, row, col) {
+  var recurse = function(board, players, col) {
     // Base case
-    if (board.pieces === n) {
-      results.push(board);
+    if (players === n) {
+      results.push(board.rows());
       return;
     }
 
-    var copiedBoard = new Board({n: n});
+/*  var copiedBoard = new Board({n: n});
     copiedBoard.set(board.rows());
-    copiedBoard.pieces = board.pieces;
-    
+    copiedBoard.pieces = Number(board.pieces);*/
+    var someRowIndex = 0;
 
-    for (var i = row; i < n; i++) { // Rows
-      for (var j = col; j < n; j++) { // Columns
-        if (!copiedBoard.get(i)[j] && !copiedBoard.hasRowConflictAt(i) && !copiedBoard.hasColConflictAt(j)) {
-          copiedBoard.togglePiece(i, j);
-          copiedBoard.pieces++;
+    for (var i = 0; i < n; i++) { // Rows
+      var someRow = board[i];
+      someRowIndex++;
+      if (!board.get(i)[someRowIndex]) {
+        board.togglePiece(i, someRowIndex);
+        if (!board.hasAnyRowConflicts() && !board.hasAnyColConflicts()) {
+          //board.pieces++;
+          recurse(board, players + 1, col + 1);
+        } else {
+          board.togglePiece(i, someRowIndex);
         }
-        if (!copiedBoard.hasAnyRowConflicts(i) && !copiedBoard.hasAnyColConflicts(j)) {
-          recurse(copiedBoard, i+1, 0); // incremenet column, if only anycolconflict
-        }
-      } // End columns loop
+      }
     } // End rows loop
-
   }
+
   var board = new Board({n: n});
-  board.pieces = 0;
   recurse(board, 0, 0);
-  return results;
+  return results.length;
 };
 
 
